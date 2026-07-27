@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "IFV - Improvements For Vortex",
+  "version": "1.0.0",
+  "description": "Quality-of-life add-ons for playvortex.io: pinning, playtime tracking, light mode, theme creator, a better server browser, and more.",
+  "host_permissions": ["https://playvortex.io/*"],
+  "permissions": ["storage", "tabs"],
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://playvortex.io/games/*/play*"],
+      "js": ["src/play-marker.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["https://playvortex.io/*"],
+      "js": ["src/storage.js", "src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

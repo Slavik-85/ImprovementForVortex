@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFV - Improvements For Vortex</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <header class="ifv-popup-header">
+        <span class="ifv-logo">IFV</span>
+        <span class="ifv-subtitle">Improvements For Vortex</span>
+    </header>
+
+    <main class="ifv-popup-body">
+        <section class="ifv-section">
+            <div class="ifv-section-title">Quick actions</div>
+            <button id="ifv-surprise" class="ifv-btn" style="width:100%;justify-content:center;">
+                <i class="fa-solid fa-shuffle"></i> Surprise Me
+            </button>
+        </section>
+
+        <section class="ifv-section">
+            <div class="ifv-section-title">Features</div>
+            <label class="ifv-toggle-row"><span>Quick play on hover</span><input type="checkbox" id="ifv-set-quickplay"></label>
+            <label class="ifv-toggle-row"><span>Prefetch on hover</span><input type="checkbox" id="ifv-set-prefetch"></label>
+            <label class="ifv-toggle-row"><span>Live stat updates</span><input type="checkbox" id="ifv-set-livestats"></label>
+        </section>
+
+        <section class="ifv-section">
+            <div class="ifv-section-title">Theme</div>
+            <div class="ifv-mode-switch" id="ifv-theme-mode">
+                <button data-mode="dark">Dark</button>
+                <button data-mode="light">Light</button>
+                <button data-mode="custom">Custom</button>
+            </div>
+            <div id="ifv-custom-colors" class="ifv-custom-colors" hidden>
+                <label>Accent <input type="color" id="ifv-color-accent"></label>
+                <label>Background <input type="color" id="ifv-color-bg"></label>
+                <label>Surface <input type="color" id="ifv-color-surface"></label>
+                <label>Text <input type="color" id="ifv-color-text"></label>
+            </div>
+        </section>
+
+        <section class="ifv-section">
+            <div class="ifv-section-title">Pinned games</div>
+            <div id="ifv-pinned-list" class="ifv-pinned-list">
+                <div class="ifv-empty">No games pinned yet — hover a game card on Vortex and click the pin icon.</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="ifv-popup-footer">
+        <a href="https://playvortex.io/home" target="_blank">playvortex.io</a>
+    </footer>
+
+    <script src="storage.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

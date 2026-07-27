@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IFV - Improvements For Vortex</title>
+<meta name="description" content="A quality-of-life browser extension for playvortex.io: pinning, playtime tracking, a better server browser, theming, and more.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+:root {
+    --bg: #0b0b12;
+    --surface: #171020;
+    --surface-2: #1e1e29;
+    --border: #24242f;
+    --border-2: #2c2c3a;
+    --text: #e5e5ea;
+    --muted: #9a9aab;
+    --muted-2: #6b6b7c;
+    --accent: #7c3aed;
+    --accent-hover: #6d28d9;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Figtree', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+.page { width: 100%; max-width: 1100px; padding-left: 2rem; padding-right: 2rem; }
+.navbar, footer { align-self: stretch; }
+
+/* ---------- navbar (styled after Vortex's own, with IFV's own identity) ---------- */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    height: 76px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    gap: 1.5rem;
+}
+.navbar-logo { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.05rem; flex-shrink: 0; }
+.navbar-logo .mark {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: block;
+}
+.navbar-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    height: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 3px;
+    flex-shrink: 0;
+}
+.navbar-pill a {
+    display: flex; align-items: center; justify-content: center;
+    height: 34px; padding: 0 0.9rem;
+    border-radius: 7px;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.navbar-pill a:hover { background: var(--surface-2); color: #fff; }
+.navbar-pill a.current { background: var(--surface-2); color: #fff; }
+.navbar-spacer { flex: 1; }
+.navbar-actions { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; }
+.navbar-icon-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 1.05rem;
+}
+.navbar-icon-btn:hover { background: var(--surface); color: #fff; }
+
+/* ---------- hero ---------- */
+
+.hero { padding: 4.5rem 0 3.5rem; }
+.hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    margin: 0 0 1.1rem;
+    max-width: 720px;
+}
+.hero h1 span { color: var(--accent); }
+.hero p.lede { max-width: 560px; color: var(--muted); font-size: 1.0625rem; margin: 0 0 2rem; }
+.cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+
+.btn-play {
+    display: inline-flex; align-items: center; gap: 0.5em;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.btn-play:hover { background: var(--accent-hover); }
+.btn-secondary {
+    padding: 0.6rem 1.3rem;
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+.btn-secondary:hover { border-color: #3d3d52; color: #fff; }
+
+.trust-row { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; color: var(--muted-2); font-size: 0.8125rem; }
+.trust-row .sep { opacity: 0.5; }
+
+/* ---------- section scaffolding ---------- */
+
+section { padding: 3.5rem 0; }
+.section-title { color: var(--muted); font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+.section-heading { font-size: clamp(1.6rem, 3vw, 2.15rem); font-weight: 700; margin: 0 0 0.6rem; }
+.section-sub { color: var(--muted); max-width: 560px; margin: 0 0 2.5rem; }
+
+/* ---------- feature spotlights (as game-description-box style panels) ---------- */
+
+.spotlight-box {
+    background: var(--surface);
+    border: 1px solid var(--surface-2);
+    border-radius: 14px;
+    padding: 2.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+.spotlight-box.reverse .spot-media { order: 2; }
+.spot-tag { color: var(--accent); font-weight: 700; font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+.spot-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 0.65rem; }
+.spot-body { color: var(--muted); margin: 0; }
+.spot-media { min-width: 0; }
+.spot-media img { width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+
+/* ---------- checklist grid ---------- */
+
+.checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.check-card {
+    background: var(--surface);
+    border: 1px solid var(--surface-2);
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+}
+.check-card i { color: var(--accent); font-size: 1rem; margin-bottom: 0.75rem; display: block; }
+.check-card h4 { margin: 0 0 0.35rem; font-size: 0.975rem; font-weight: 700; }
+.check-card p { margin: 0; font-size: 0.875rem; color: var(--muted); }
+
+/* ---------- install ---------- */
+
+.install-steps { counter-reset: step; display: grid; gap: 0.75rem; max-width: 620px; }
+.install-step {
+    counter-increment: step;
+    display: flex; gap: 1rem; align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--surface-2);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+}
+.install-step::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.875rem;
+}
+.install-step code { background: var(--bg); border: 1px solid var(--border-2); border-radius: 5px; padding: 0.1em 0.5em; font-size: 0.875em; color: var(--accent); }
+.install-step p { margin: 0; color: var(--muted); }
+.install-step p strong { color: var(--text); }
+.install-step a { color: var(--text); text-decoration: underline; text-decoration-color: var(--border-2); text-underline-offset: 3px; }
+
+/* ---------- privacy card ---------- */
+
+.privacy-card {
+    display: flex; gap: 1.25rem; align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--surface-2);
+    border-radius: 14px;
+    padding: 2rem;
+    max-width: 760px;
+}
+.privacy-card i { color: var(--accent); font-size: 1.25rem; margin-top: 0.15rem; }
+.privacy-card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; font-weight: 700; }
+.privacy-card p { margin: 0; color: var(--muted); }
+.privacy-card a { color: var(--text); text-decoration: underline; text-decoration-color: var(--border-2); text-underline-offset: 3px; }
+
+/* ---------- footer (mirrors Vortex's own contentinfo layout) ---------- */
+
+footer { border-top: 1px solid var(--surface-2); padding: 2.5rem 0; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+.footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; color: var(--muted); font-size: 0.875rem; }
+.footer-links a:hover { color: var(--text); }
+.footer-social { display: flex; gap: 0.6rem; }
+.footer-social a {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+}
+.footer-social a:hover { color: #fff; background: var(--surface-2); }
+.disclaimer { color: var(--muted-2); font-size: 0.8125rem; max-width: 620px; margin: 1.5rem 0 0; }
+
+/* ---------- reveal ---------- */
+
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { transition: none; opacity: 1; transform: none; }
+}
+
+@media (max-width: 760px) {
+    .spotlight-box { grid-template-columns: 1fr; padding: 1.75rem; }
+    .spotlight-box.reverse .spot-media { order: 0; }
+    .navbar-pill a span.label { display: none; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a class="navbar-logo" href="#top"><img class="mark" src="favicon.png" alt="IFV"> IFV</a>
+    <div class="navbar-pill">
+        <a class="current" href="#top">Home</a>
+        <a href="#features">Features</a>
+        <a href="#install">Install</a>
+    </div>
+    <div class="navbar-spacer"></div>
+    <div class="navbar-actions">
+        <a class="navbar-icon-btn" href="privacy.html" title="Privacy Policy"><i class="fa-solid fa-shield-halved"></i></a>
+        <a class="navbar-icon-btn" href="https://github.com/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+    </div>
+</nav>
+
+<header class="hero page" id="top">
+    <h1>Everything Vortex <span>forgot to ship.</span></h1>
+    <p class="lede">IFV is a free browser extension that adds the quality-of-life features Vortex doesn't have - pinning, playtime tracking, a real server browser, and theming that's actually yours.</p>
+    <div class="cta-row">
+        <a class="btn-play" href="https://github.com/"><i class="fa-brands fa-github"></i> View on GitHub</a>
+        <a class="btn-secondary" href="#install">Install it</a>
+    </div>
+    <div class="trust-row">
+        <span>Free</span><span class="sep">·</span>
+        <span>Open source</span><span class="sep">·</span>
+        <span>No tracking, no data collection</span><span class="sep">·</span>
+        <span>Runs entirely on your device</span><span class="sep">·</span>
+        <span>Not affiliated with Vortex</span>
+    </div>
+</header>
+
+<section class="page" id="features">
+    <div class="section-title">Features</div>
+    <h2 class="section-heading">Built to feel like it shipped with the site</h2>
+    <p class="section-sub">Every feature below runs directly on playvortex.io's own pages - no separate app, no extra tab.</p>
+
+    <div class="spotlight-box reveal">
+        <div>
+            <div class="spot-tag">Pinning &amp; playtime</div>
+            <h3 class="spot-title">Pin it. Track it. Never lose it.</h3>
+            <p class="spot-body">Pin your favorite games straight from the grid - they get their own row on your home page. Every time you hit Play, IFV quietly tracks how long you've actually spent in that game, right there on the card.</p>
+        </div>
+        <div class="spot-media"><img src="screenshots/pinned-playtime.png" alt="Home page showing a pinned Vortexia game card with a quick play button and 12 minutes of tracked playtime"></div>
+    </div>
+
+    <div class="spotlight-box reverse reveal">
+        <div>
+            <div class="spot-tag">Toolbar popup</div>
+            <h3 class="spot-title">Your whole toolkit, one click.</h3>
+            <p class="spot-body">Every feature toggle, your theme settings, and your full pinned-games list - all in one popup that lives in your toolbar. Nothing to dig for, nothing buried in a settings page.</p>
+        </div>
+        <div class="spot-media"><img src="screenshots/popup.png" alt="The IFV toolbar popup showing quick actions, feature toggles, theme creator, and pinned games"></div>
+    </div>
+
+    <div class="spotlight-box reveal">
+        <div>
+            <div class="spot-tag">Server browser</div>
+            <h3 class="spot-title">A server list that works for you.</h3>
+            <p class="spot-body">Search a server by nickname, hide the ones that are full, or auto-join the least (or most) full one in a single click. Vortex shows you the list - IFV makes it useful.</p>
+        </div>
+        <div class="spot-media"><img src="screenshots/server-browser.png" alt="Game detail page with an enhanced server browser: search by nickname, hide full, join least full, join most full"></div>
+    </div>
+
+    <div class="spotlight-box reverse reveal">
+        <div>
+            <div class="spot-tag">Theme creator</div>
+            <h3 class="spot-title">Make it actually yours.</h3>
+            <p class="spot-body">Vortex only ever shipped one look. Flip to a full light mode, or pick your own accent, background, surface, and text colors - applied everywhere, instantly.</p>
+        </div>
+        <div class="spot-media"><img src="screenshots/home-pinned-theme.png" alt="Vortex home page with a custom pink theme applied, showing friends and the pinned games row"></div>
+    </div>
+</section>
+
+<section class="page">
+    <div class="section-title">And the rest</div>
+    <h2 class="section-heading">Six more small upgrades</h2>
+    <p class="section-sub">Nothing flashy - just the things you'd expect a site like this to already do.</p>
+    <div class="checklist">
+        <div class="check-card reveal"><i class="fa-solid fa-bolt"></i><h4>Live player counts</h4><p>Game cards and detail pages update in the background - no refresh needed.</p></div>
+        <div class="check-card reveal"><i class="fa-solid fa-play"></i><h4>Quick play &amp; prefetch</h4><p>Hover a card and the next page is already loading before you click.</p></div>
+        <div class="check-card reveal"><i class="fa-solid fa-shuffle"></i><h4>Surprise me</h4><p>One button, one random game. Zero decision fatigue.</p></div>
+        <div class="check-card reveal"><i class="fa-solid fa-user-group"></i><h4>Join a friend</h4><p>Hover a friend, or visit their profile, and jump into their exact server.</p></div>
+        <div class="check-card reveal"><i class="fa-solid fa-mug-hot"></i><h4>Dynamic greetings</h4><p>"Morning," "Evening," "Night Owl" - a hello that knows what time it is.</p></div>
+        <div class="check-card reveal"><i class="fa-solid fa-plug"></i><h4>Zero setup</h4><p>Install it, visit playvortex.io, and every feature is already running.</p></div>
+    </div>
+</section>
+
+<section class="page" id="install">
+    <div class="section-title">Get started</div>
+    <h2 class="section-heading">Install it in under a minute</h2>
+    <p class="section-sub">Not on the Chrome Web Store yet - for now, load it unpacked like a developer.</p>
+    <div class="install-steps">
+        <div class="install-step reveal"><p>Download or <code>git clone</code> this repository to your computer.</p></div>
+        <div class="install-step reveal"><p>Open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong> (top right).</p></div>
+        <div class="install-step reveal"><p>Click <strong>Load unpacked</strong> and select the project folder.</p></div>
+        <div class="install-step reveal"><p>Visit <a href="https://playvortex.io">playvortex.io</a> - IFV is already running.</p></div>
+    </div>
+</section>
+
+<section class="page">
+    <div class="privacy-card reveal">
+        <i class="fa-solid fa-shield-halved"></i>
+        <div>
+            <h3>No tracking. No data collection.</h3>
+            <p>Everything IFV stores - pins, playtime, theme, settings - lives only in your own browser. Nothing is ever sent to us or anyone else. Read the full <a href="privacy.html">privacy policy</a>.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="page footer-inner">
+        <a class="navbar-logo" href="#top"><img class="mark" src="favicon.png" alt="IFV"> IFV</a>
+        <div class="footer-links">
+            <a href="https://github.com/">Source</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="https://playvortex.io">playvortex.io</a>
+        </div>
+        <div class="footer-social">
+            <a href="https://github.com/" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        </div>
+    </div>
+    <div class="page">
+        <p class="disclaimer">IFV - Improvements For Vortex is an unofficial, fan-made browser extension. It is not affiliated with, endorsed by, or sponsored by Vortex. All Vortex trademarks and branding belong to their respective owners.</p>
+    </div>
+</footer>
+
+<script>
+    document.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 60 + 'ms'; });
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+        });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+
+</body>
+</html>

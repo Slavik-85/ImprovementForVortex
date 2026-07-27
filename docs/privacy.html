@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy - IFV</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+:root {
+    --bg: #0b0b12;
+    --surface: #171020;
+    --surface-2: #1e1e29;
+    --border-2: #2c2c3a;
+    --text: #e5e5ea;
+    --muted: #9a9aab;
+    --accent: #7c3aed;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Figtree', system-ui, -apple-system, sans-serif;
+    line-height: 1.7;
+}
+a { color: var(--text); text-decoration: underline; text-decoration-color: var(--border-2); text-underline-offset: 3px; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.back { display: inline-flex; align-items: center; gap: 0.5em; color: var(--muted); text-decoration: none; font-size: 0.9rem; margin-bottom: 2rem; }
+.back:hover { color: var(--text); }
+h1 { font-size: 1.9rem; font-weight: 700; margin: 0 0 0.5rem; }
+.updated { color: var(--muted); font-size: 0.85rem; margin-bottom: 2.5rem; }
+h2 { font-size: 1.05rem; font-weight: 700; margin: 2.2rem 0 0.75rem; }
+p, li { color: var(--muted); }
+ul { padding-left: 1.2rem; }
+.card { background: var(--surface); border: 1px solid var(--surface-2); border-radius: 14px; padding: 1.5rem 1.75rem; margin: 2rem 0; }
+.card strong { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to IFV</a>
+    <h1>Privacy Policy</h1>
+    <p class="updated">IFV - Improvements For Vortex</p>
+
+    <p>IFV is a browser extension that adds optional quality-of-life features on top of playvortex.io. This extension does not collect, store, transmit, or sell any personal data.</p>
+
+    <h2>What the extension stores</h2>
+    <p>All data used by the extension is saved locally on your own device using the browser's <code>chrome.storage.local</code> API, and never leaves your computer:</p>
+    <ul>
+        <li>Which games you've pinned</li>
+        <li>Your own per-game playtime (a local estimate, based on when a Vortex tab regains focus after you launch a game)</li>
+        <li>Your theme preference (light/dark/custom colors)</li>
+        <li>Feature toggle settings (quick play, prefetch, live stats)</li>
+    </ul>
+    <p>None of this data is sent to any server operated by the extension's developer or any third party.</p>
+
+    <h2>Network requests</h2>
+    <p>The extension only communicates with playvortex.io itself, using the same public API endpoints the site's own pages already call (e.g. game lists, server lists, player search) - it does not introduce any new data collection or send data to any other destination.</p>
+
+    <h2>No remote code</h2>
+    <p>The extension contains no remote or dynamically-loaded JavaScript. All code is bundled with the extension package and reviewed at install time.</p>
+
+    <div class="card">
+        <strong>Questions?</strong> Open an issue on the <a href="https://github.com/">GitHub repository</a>.
+    </div>
+</div>
+</body>
+</html>
