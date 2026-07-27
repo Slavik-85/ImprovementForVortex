@@ -37,7 +37,7 @@ body {
 }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
-.page { width: 100%; max-width: 1100px; padding-left: 2rem; padding-right: 2rem; }
+.page { width: 100%; max-width: 1100px; margin: 0 auto; padding-left: 2rem; padding-right: 2rem; }
 .navbar, footer { align-self: stretch; }
 
 /* ---------- navbar (styled after Vortex's own, with IFV's own identity) ---------- */
@@ -236,7 +236,7 @@ footer { border-top: 1px solid var(--surface-2); padding: 2.5rem 0; }
     color: var(--muted);
 }
 .footer-social a:hover { color: #fff; background: var(--surface-2); }
-.disclaimer { color: var(--muted-2); font-size: 0.8125rem; max-width: 620px; margin: 1.5rem 0 0; }
+.disclaimer { color: var(--muted-2); font-size: 0.8125rem; max-width: 620px; margin: 1.5rem auto 0; text-align: center; }
 
 /* ---------- reveal ---------- */
 
@@ -390,6 +390,19 @@ footer { border-top: 1px solid var(--surface-2); padding: 2.5rem 0; }
         });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    const navLinks = document.querySelectorAll('.navbar-pill a');
+    const navTargets = ['#top', '#features', '#install']
+        .map((id) => document.querySelector(id))
+        .filter(Boolean);
+    const spy = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const id = '#' + entry.target.id;
+            navLinks.forEach((a) => a.classList.toggle('current', a.getAttribute('href') === id));
+        });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    navTargets.forEach((section) => spy.observe(section));
 </script>
 
 </body>
